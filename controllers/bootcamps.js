@@ -9,7 +9,7 @@ Controller: bootcamps
 @access: Public
 */
 const getBootcamps = (req, res) =>
-    res.json({ success: true, data: { age: 22, mobile: 8990909090 } });
+  res.json({ success: true, data: { age: 22, mobile: 8990909090 } });
 
 /*
 @desc: Add a new bootcamp
@@ -18,8 +18,8 @@ const getBootcamps = (req, res) =>
 @access: Private
 */
 const createBootcamp = (req, res) => {
-    const bootcampName = req.body
-    res.json({ success: true, message: `Created new bootcamp: ${bootcampName}` })
+  const bootcampName = req.body;
+  res.json({ success: true, message: `Created new bootcamp: ${bootcampName}` });
 };
 
 /*
@@ -29,7 +29,7 @@ const createBootcamp = (req, res) => {
 @access: Private
 */
 const updateBootcamp = (req, res) =>
-    res.json({ success: true, message: `Update bootcamp ${req.param.id}` });
+  res.json({ success: true, message: `Update bootcamp ${req.param.id}` });
 
 /*
 @desc: Delete a bootcamp from catalogue
@@ -38,7 +38,6 @@ const updateBootcamp = (req, res) =>
 @access: Private
 */
 const deleteBootcamp = (req, res) =>
-    res.json({ success: true, message: `Delete bootcamp ${req.param.id}` });
-
+  res.json({ success: true, message: `Delete bootcamp ${req.param.id}` });
 
 export { getBootcamps, createBootcamp, updateBootcamp, deleteBootcamp };
