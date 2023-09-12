@@ -6,6 +6,7 @@ import bootcamps from './routes/router.js';
 import connectDB from './config/db.js';
 
 const app = express();
+app.use(express.json())
 
 // Load environment variables
 dotenv.config({ path: './config/config.env' });

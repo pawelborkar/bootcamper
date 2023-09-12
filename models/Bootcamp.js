@@ -101,7 +101,7 @@ const BootcampSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
   },
   {
@@ -109,3 +109,6 @@ const BootcampSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+
+export default mongoose.model('Bootcamp', BootcampSchema)

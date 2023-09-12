@@ -2,6 +2,7 @@
 Controller: bootcamps
 */
 
+import Bootcamp from "../models/Bootcamp.js";
 /*
 @desc: Get all bootcamps information
 @Author: Pawel Borkar
@@ -9,7 +10,7 @@ Controller: bootcamps
 @access: Public
 */
 const getBootcamps = (req, res) =>
-  res.json({ success: true, data: { age: 22, mobile: 8990909090 } });
+  res.json({ success: true, data: Bootcamp});
 
 /*
 @desc: Add a new bootcamp
@@ -17,9 +18,13 @@ const getBootcamps = (req, res) =>
 @route: POST /api/v1/bootcamp
 @access: Private
 */
-const createBootcamp = (req, res) => {
-  const bootcampName = req.body;
-  res.json({ success: true, message: `Created new bootcamp: ${bootcampName}` });
+const createBootcamp = async (req, res) => {
+  const bootCamp = await BootcampSchema.create(req.body)
+  res.status(201).json({
+    success:true,
+    data: bootCamp
+  })
+  // res.json({ success: true, message: `Created new bootcamp: ${bootcampName}` });
 };
 
 /*
@@ -28,7 +33,7 @@ const createBootcamp = (req, res) => {
 @route: PUT /api/v1/bootcamp/:id
 @access: Private
 */
-const updateBootcamp = (req, res) =>
+const updateBootcamp = (req, res) =>  
   res.json({ success: true, message: `Update bootcamp ${req.param.id}` });
 
 /*
