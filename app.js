@@ -4,6 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 import bootcamps from './routes/router.js';
 import connectDB from './config/db.js';
+import errorHandler from './middleware/error.js';
 
 const app = express();
 app.use(express.json());
@@ -20,8 +21,9 @@ if (process.env.NODE_ENV === 'development') {
 // Connect to cloud database
 connectDB();
 
-// app.use(express.json())
+// Mounte routers
 app.use('/api/v1/bootcamps', bootcamps);
+app.use(errorHandler)
 
 // home route
 app.listen(PORT, () => {
