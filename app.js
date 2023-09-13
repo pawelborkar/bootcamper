@@ -23,7 +23,7 @@ connectDB();
 
 // Mounte routers
 app.use('/api/v1/bootcamps', bootcamps);
-app.use(errorHandler)
+app.use(errorHandler);
 
 // home route
 app.listen(PORT, () => {

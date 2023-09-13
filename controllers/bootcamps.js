@@ -1,7 +1,7 @@
 /*
 Controller: bootcamps
 */
-
+import ErrorResponse from '../utils/errorResponse.js';
 import Bootcamp from '../models/Bootcamp.js';
 /*
 @desc: Get all bootcamps information
@@ -12,7 +12,9 @@ import Bootcamp from '../models/Bootcamp.js';
 const getAllBootcamps = async (req, res) => {
   try {
     const allBootcamps = await Bootcamp.find();
-    res.status(200).json({ success: true, count: allBootcamps.length,  data: allBootcamps });
+    res
+      .status(200)
+      .json({ success: true, count: allBootcamps.length, data: allBootcamps });
   } catch (error) {
     res.status(400).json({ success: false });
   }
@@ -29,14 +31,22 @@ const getSingleBootcamp = async (req, res, next) => {
     const bootcamp = await Bootcamp.findById(req.params.id);
 
     if (!bootcamp) {
-      return json.status(404).json({
-        success: false,
-      });
+      return next(
+        new ErrorResponse(
+          `Bootcamp not found with an id of ${req.params.id}`,
+          404
+        )
+      );
     }
     res.status(200).json({ success: true, data: bootcamp });
   } catch (error) {
     // res.status(400).json({ success: false });
-    next(error)
+    next(
+      new ErrorResponse(
+        `Bootcamp not found with an id of ${req.params.id}`,
+        404
+      )
+    );
   }
 };
 
@@ -87,7 +97,7 @@ const updateBootcamp = async (req, res) => {
 @access: Private
 */
 const deleteBootcamp = async (req, res) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id );
+  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
 
   if (!bootcamp) {
     return res.status(400).json({ success: false });
