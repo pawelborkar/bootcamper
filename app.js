@@ -6,7 +6,7 @@ import bootcamps from './routes/router.js';
 import connectDB from './config/db.js';
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 
 // Load environment variables
 dotenv.config({ path: './config/config.env' });
@@ -26,10 +26,10 @@ app.use('/api/v1/bootcamps', bootcamps);
 // home route
 app.listen(PORT, () => {
   console.log(
-    chalk.magentaBright(
-      `Server running in ${
+    chalk.greenBright(
+      `Environment: ${chalk.cyanBright(
         process.env.NODE_ENV
-      } on http://localhost:${chalk.cyanBright(PORT)}`
+      )}, Port ${chalk.cyanBright(PORT)}`
     )
   );
 });

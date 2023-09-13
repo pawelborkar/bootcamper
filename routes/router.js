@@ -1,18 +1,19 @@
 import express from 'express';
 import {
-  getBootcamps,
+  getAllBootcamps,
+  getSingleBootcamp,
   createBootcamp,
   updateBootcamp,
   deleteBootcamp,
 } from '../controllers/bootcamps.js';
 
-const router = express.Router()
+const router = express.Router();
 
-router.route('/').get(getBootcamps).post(createBootcamp);
+router.route('/').get(getAllBootcamps).post(createBootcamp);
 
 router
   .route('/:id')
-  .get(getBootcamps)
+  .get(getSingleBootcamp)
   .delete(deleteBootcamp)
   .put(updateBootcamp);
 

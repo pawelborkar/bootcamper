@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import slugify from 'slugify';
 const BootcampSchema = new mongoose.Schema(
   {
     name: {
@@ -23,7 +24,7 @@ const BootcampSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      maxlength: [12, 'Phone number can not be longer than 20 characters'],
+      maxlength: [16, 'Phone number can not be longer than 16 characters'],
     },
     email: {
       type: String,
@@ -41,10 +42,12 @@ const BootcampSchema = new mongoose.Schema(
       type: {
         type: String,
         enum: ['Point'],
+        // required: true,
       },
       coordinates: {
         type: [Number],
         index: '2dsphere',
+        // required: true,
       },
       formattedAddress: String,
       street: String,
@@ -110,5 +113,8 @@ const BootcampSchema = new mongoose.Schema(
   }
 );
 
-
-export default mongoose.model('Bootcamp', BootcampSchema)
+BootcampSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+export default mongoose.model('Bootcamp', BootcampSchema);
