@@ -23,7 +23,6 @@ const bootcamps = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8')
 );
 
-
 // Import data from the file
 const importData = async () => {
   try {

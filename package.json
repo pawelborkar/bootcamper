@@ -4,7 +4,11 @@
   "description": "DevCamper API Course on udemy by Brad Traversy",
   "main": "app.js",
   "repository": "https://github.com/pawelborkar/devcamper",
-  "author": "Pawel Borkar",
+  "author": {
+    "name": "Pawel Borkar",
+    "email": "pawel@duck.com",
+    "url": "https://pawel.in"
+  },
   "license": "MIT",
   "type": "module",
   "scripts": {

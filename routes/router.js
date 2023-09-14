@@ -5,10 +5,12 @@ import {
   createBootcamp,
   updateBootcamp,
   deleteBootcamp,
+  getBootcampsWithinRadius,
 } from '../controllers/bootcamps.js';
 
 const router = express.Router();
 
+router.route('/radius').get(getBootcampsWithinRadius)
 router.route('/').get(getAllBootcamps).post(createBootcamp);
 
 router
