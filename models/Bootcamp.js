@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 import geocoder from '../utils/geocoder.js';
+import chalk from 'chalk';
 const BootcampSchema = new mongoose.Schema(
   {
     name: {
@@ -121,21 +122,37 @@ BootcampSchema.pre('save', function (next) {
 });
 
 // Geocode and create location field
-
 BootcampSchema.pre('save', async function (next) {
-  const loc = await geocoder.geocode(this.address);
-  this.location = {
-    type: 'Point',
-    coordinates: [loc[0].longitude, loc[0].latitude],
-    street: loc[0].streetName,
-    city: loc[0].city,
-    state: loc[0].state,
-    zipcode: loc[0].zipcode,
-    country: loc[0].country,
-  };
+  try {
+    const loc = await geocoder.geocode(this.address);
+    if (loc && loc.length > 0) {
+      this.location = {
+        type: 'Point',
+        coordinates: [loc[0].longitude, loc[0].latitude],
+        street: loc[0].streetName,
+        city: loc[0].city,
+        state: loc[0].state,
+        zipcode: loc[0].zipcode,
+        country: loc[0].country,
+      };
+    } else {
+      // Handle the case where geocoder returned an empty result
+      // or loc[0] is undefined
+      console.error(
+        chalk.redBright.underline(
+          'Geocoder did not return valid location data.'
+        )
+      );
+    }
 
-  // Don't save address in the database
-  this.address = undefined;
-  next();
+    // Don't save address in the database
+    this.address = undefined;
+    next();
+  } catch (error) {
+    // Handle any errors that may occur during geocoding
+    console.error('Error during geocoding:', error);
+    next(error); // Pass the error to the next middleware
+  }
 });
+
 export default mongoose.model('Bootcamp', BootcampSchema);

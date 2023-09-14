@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { mongoose } from 'mongoose';
 import dotenv from 'dotenv';
 import Bootcamp from './models/Bootcamp.js';
+import Course from './models/Course.js';
 import chalk from 'chalk';
 
 dotenv.config({ path: './config/config.env' });
@@ -22,11 +23,15 @@ mongoose.connect(process.env.MONGO_URI, {
 const bootcamps = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8')
 );
+const courses = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/courses.json`, 'utf-8')
+);
 
 // Import data from the file
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
+    await Course.create(courses);
     console.log(chalk.bgGreenBright('Data imported successfully...'));
     process.exit();
   } catch (error) {
@@ -38,6 +43,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Bootcamp.deleteMany();
+    await Course.deleteMany();
     console.log(chalk.bgRedBright('Data deleted successfully...'));
     process.exit();
   } catch (error) {
