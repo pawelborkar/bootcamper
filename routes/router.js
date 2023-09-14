@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.route('/radius').get(getBootcampsWithinRadius)
+router.route('/radius').get(getBootcampsWithinRadius);
 router.route('/').get(getAllBootcamps).post(createBootcamp);
 
 router

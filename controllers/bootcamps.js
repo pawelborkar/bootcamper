@@ -12,20 +12,50 @@ import geocoder from '../utils/geocoder.js';
 @route: GET /api/v1/bootcamps
 @access: Public
 */
-const getAllBootcamps = asyncHandler(async (req, res, next) => {
+const getAllBootcamps = asyncHandler(async (req, res) => {
   let query;
+
+  // Copy req.query
+  const reqQuery = { ...req.query };
+  console.log('Req Query: ', reqQuery);
+
+  // Remove fields
+  const removeFields = ['select', 'sort'];
+
+  // Loop overs removefields array and deletes them from the query
+  removeFields.forEach((param) => delete reqQuery[param]);
+
   // String maninpulation in order to format the query string from the params in the mongodb acceptable manner for more visit: https://www.mongodb.com/docs/manual/reference/operator/query/gte/#mongodb-query-op.-gte
+  let queryString = JSON.stringify(reqQuery); // Create query string
 
-  let queryString = JSON.stringify(req.query);
-
+  // Create operators for gt, gte, lt, lte and in
   queryString = queryString.replace(
     /\b(gt|gte|lt|lte|in)\b/g, // regex for greater than, greater than equal to, less than, less than equal to and in
     (match) => `$${match}`
   );
 
-  query = Bootcamp.find(JSON.parse(queryString));
+  queryString = JSON.parse(queryString);
+  // Finding the resource in the database
+  query = Bootcamp.find(queryString);
 
+  // Select Fields
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    query = query.select(fields);
+  }
+
+  // Sort
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    query = query.sort(sortBy);
+    // console.log('SORT', query);
+  } else {
+    query = query.sort('-createdAt');
+  }
+
+  // Execute the query
   const allBootcamps = await query;
+
   res
     .status(200)
     .json({ success: true, count: allBootcamps.length, data: allBootcamps });
