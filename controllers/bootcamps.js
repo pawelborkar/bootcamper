@@ -5,6 +5,7 @@ import ErrorResponse from '../utils/errorResponse.js';
 import asyncHandler from '../middleware/async.js';
 import Bootcamp from '../models/Bootcamp.js';
 import geocoder from '../utils/geocoder.js';
+
 /*
 @desc: Get all bootcamps information
 @Author: Pawel Borkar
@@ -12,7 +13,19 @@ import geocoder from '../utils/geocoder.js';
 @access: Public
 */
 const getAllBootcamps = asyncHandler(async (req, res, next) => {
-  const allBootcamps = await Bootcamp.find();
+  let query;
+  // String maninpulation in order to format the query string from the params in the mongodb acceptable manner for more visit: https://www.mongodb.com/docs/manual/reference/operator/query/gte/#mongodb-query-op.-gte
+
+  let queryString = JSON.stringify(req.query);
+
+  queryString = queryString.replace(
+    /\b(gt|gte|lt|lte|in)\b/g, // regex for greater than, greater than equal to, less than, less than equal to and in
+    (match) => `$${match}`
+  );
+
+  query = Bootcamp.find(JSON.parse(queryString));
+
+  const allBootcamps = await query;
   res
     .status(200)
     .json({ success: true, count: allBootcamps.length, data: allBootcamps });
