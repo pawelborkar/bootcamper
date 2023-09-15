@@ -1,6 +1,7 @@
 /*
 Controller: bootcamps
 */
+import path from 'node:path';
 import ErrorResponse from '../utils/errorResponse.js';
 import asyncHandler from '../middleware/async.js';
 import Bootcamp from '../models/Bootcamp.js';
@@ -13,83 +14,7 @@ import geocoder from '../utils/geocoder.js';
 @access: Public
 */
 const getAllBootcamps = asyncHandler(async (req, res) => {
-  let query;
-
-  // Copy req.query
-  const reqQuery = { ...req.query };
-
-  // Remove fields
-  const removeFields = ['limit', 'page', 'select', 'sort'];
-
-  // Loop overs removefields array and deletes them from the query
-  removeFields.forEach((param) => delete reqQuery[param]);
-
-  // String maninpulation in order to format the query string from the params in the mongodb acceptable manner for more visit: https://www.mongodb.com/docs/manual/reference/operator/query/gte/#mongodb-query-op.-gte
-  let queryString = JSON.stringify(reqQuery); // Create query string
-
-  // Create operators for gt, gte, lt, lte and in
-  queryString = queryString.replace(
-    /\b(gt|gte|lt|lte|in)\b/g, // regex for greater than, greater than equal to, less than, less than equal to and in
-    (match) => `$${match}`
-  );
-
-  queryString = JSON.parse(queryString);
-  // Finding the resource in the database
-  query = Bootcamp.find(queryString).populate({
-    path: 'courses',
-    select: 'title description weeks tuition level',
-  });
-
-  // Select Fields
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    query = query.select(fields);
-  }
-
-  // Sort
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort('-createdAt');
-  }
-
-  // Pagination
-  const page = parseInt(req.query.page, 10) || 1;
-
-  // Limit
-  const limit = parseInt(req.query.limit, 10) || 10;
-
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await Bootcamp.countDocuments();
-  query = query.skip(startIndex).limit(limit);
-
-  // Execute the query
-  const allBootcamps = await query;
-
-  // Pagination Result
-  const pagination = {};
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-
-  if (startIndex > 0) {
-    pagination.pre = {
-      page: page - 1,
-      limit,
-    };
-  }
-  res.status(200).json({
-    success: true,
-    count: allBootcamps.length,
-    pagination,
-    data: allBootcamps,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 /*
@@ -204,6 +129,67 @@ const getBootcampsWithinRadius = asyncHandler(async (req, res, next) => {
   });
 });
 
+/*
+@desc: Upload photo for the bootcamp
+@Author: Pawel Borkar
+@route: PUT /api/v1/bootcamps/:bootcampId/photo
+@access: Private
+*/
+const bootcampUploadPhoto = asyncHandler(async (req, res, next) => {
+  const bootcamp = await Bootcamp.findById(req.params.id);
+
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(
+        `Bootcamp not found with an id of ${req.params.id}`,
+        404
+      )
+    );
+  }
+
+  if (!req.files) {
+    return next(new ErrorResponse(`Please upload a file`, 400));
+  }
+  const file = req.files.file;
+
+  if (!file.mimetype.startsWith('image')) {
+    return next(
+      new ErrorResponse(`Please upload an image of type jpg, jpeg or png`, 400)
+    );
+  }
+
+  // Check file size
+  if (file.size > process.env.MAX_FILE_UPLOAD_SIZE) {
+    return next(
+      new ErrorResponse(
+        `Please upload an image less than ${
+          process.env.MAX_FILE_UPLOAD_SIZE / (1024 * 1024)
+        } MB`,
+        400
+      )
+    );
+  }
+
+  // Create custom file name for uniqueness
+  file.name = `img-${file.name.split('.')[0]}-${Date.now()}${
+    path.parse(file.name).ext
+  }`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse(`Something went wrong.`, 500));
+    }
+
+    await Bootcamp.findByIdAndUpdate(req.params.id, { photo: file.name });
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Image uploaded successfully.',
+  });
+});
+
 export {
   getAllBootcamps,
   getSingleBootcamp,
@@ -211,4 +197,5 @@ export {
   createBootcamp,
   updateBootcamp,
   deleteBootcamp,
+  bootcampUploadPhoto,
 };
