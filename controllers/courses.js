@@ -5,6 +5,7 @@ import Bootcamp from '../models/Bootcamp.js';
 
 /*
 @desc: Get all courses for a specific bootcamp
+@Author: Pawel Borkar
 @route: GET /api/v1/courses
 @route: GET /api/v1/bootcamps/bootcampId/courses
 @access: Public
@@ -34,6 +35,7 @@ const getCourses = asyncHandler(async (req, res) => {
 
 /*
 @desc: Get a single courses for a specific bootcamp
+@Author: Pawel Borkar
 @route: GET /api/v1/courses/:id
 @route: GET /api/v1/bootcamps/bootcampId/courses/:id
 @access: Public
@@ -58,6 +60,7 @@ const getCourse = asyncHandler(async (req, res) => {
 
 /*
 @desc: Add a new course
+@Author: Pawel Borkar
 @route: POST /api/v1/bootcamps/:bootcampId/courses
 @access: Private
 */
@@ -112,7 +115,7 @@ const updateCourse = asyncHandler(async (req, res, next) => {
 @access: Private
 */
 const deleteCourse = asyncHandler(async (req, res, next) => {
-  let course = await Course.findById(req.params.id);
+  const course = await Course.findById(req.params.id);
 
   if (!course) {
     return next(
@@ -120,9 +123,10 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
-  course = await Course.findByIdAndDelete(req.params.id);
-
-  res.status(200).json({ success: true, data: course });
+  await course.remove();
+  res
+    .status(200)
+    .json({ success: true, data: [], message: 'Course deleted successfully' });
 });
 
 export { getCourses, getCourse, createCourse, updateCourse, deleteCourse };
