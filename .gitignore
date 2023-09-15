@@ -3,3 +3,4 @@ resources
 config/config.env
 .env
 .vscode
+public/uploads/*

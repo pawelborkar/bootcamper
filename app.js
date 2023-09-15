@@ -1,7 +1,10 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
+import fileupload from 'express-fileupload';
 import bootcamps from './routes/bootcamps.js';
 import courses from './routes/courses.js';
 import connectDB from './config/db.js';
@@ -21,6 +24,15 @@ if (process.env.NODE_ENV === 'development') {
 
 // Connect to cloud database
 connectDB();
+
+// File uploading
+app.use(fileupload());
+
+// Set static folder
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Mounte routers
 app.use('/api/v1/bootcamps', bootcamps);

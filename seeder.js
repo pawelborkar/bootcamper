@@ -1,16 +1,15 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { mongoose } from 'mongoose';
 import dotenv from 'dotenv';
+import chalk from 'chalk';
 import Bootcamp from './models/Bootcamp.js';
 import Course from './models/Course.js';
-import chalk from 'chalk';
 
 dotenv.config({ path: './config/config.env' });
 
 const __filename = fileURLToPath(import.meta.url);
-
 const __dirname = path.dirname(__filename);
 
 // Connect to mongodb database
@@ -31,7 +30,7 @@ const courses = JSON.parse(
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
-    // await Course.create(courses);
+    await Course.create(courses);
     console.log(chalk.bgGreenBright('Data imported successfully...'));
     process.exit();
   } catch (error) {
