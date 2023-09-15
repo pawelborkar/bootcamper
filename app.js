@@ -2,7 +2,8 @@ import chalk from 'chalk';
 import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
-import bootcamps from './routes/router.js';
+import bootcamps from './routes/bootcamps.js';
+import courses from './routes/courses.js';
 import connectDB from './config/db.js';
 import errorHandler from './middleware/error.js';
 
@@ -23,6 +24,7 @@ connectDB();
 
 // Mounte routers
 app.use('/api/v1/bootcamps', bootcamps);
+app.use('/api/v1/courses', courses);
 app.use(errorHandler);
 
 // home route

@@ -35,7 +35,10 @@ const getAllBootcamps = asyncHandler(async (req, res) => {
 
   queryString = JSON.parse(queryString);
   // Finding the resource in the database
-  query = Bootcamp.find(queryString);
+  query = Bootcamp.find(queryString).populate({
+    path: 'courses',
+    select: 'title description weeks tuition level',
+  });
 
   // Select Fields
   if (req.query.select) {

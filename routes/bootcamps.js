@@ -8,7 +8,13 @@ import {
   getBootcampsWithinRadius,
 } from '../controllers/bootcamps.js';
 
+// Include other resource routers
+import courseRouter from './courses.js';
+
 const router = express.Router();
+
+// Re-routing to the resource
+router.use('/:bootcampId/courses', courseRouter);
 
 router.route('/radius').get(getBootcampsWithinRadius);
 router.route('/').get(getAllBootcamps).post(createBootcamp);

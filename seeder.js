@@ -52,7 +52,6 @@ const deleteData = async () => {
 };
 
 // Reading flags from the terminal and calling functions accordingly
-
 if (process.argv[2] === 'import' || process.argv[2] === '-i') {
   importData();
 } else if (process.argv[2] === 'delete' || process.argv[2] === '-d') {
