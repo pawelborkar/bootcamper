@@ -157,7 +157,7 @@ const updateBootcamp = asyncHandler(async (req, res, next) => {
 @access: Private
 */
 const deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
     return next(
@@ -167,6 +167,8 @@ const deleteBootcamp = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  bootcamp.remove(); // Removes bootcamp and all associated courses from database.
 
   res.status(200).json({ success: true, data: bootcamp });
 });
