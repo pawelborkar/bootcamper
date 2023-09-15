@@ -27,7 +27,7 @@ const courses = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/courses.json`, 'utf-8')
 );
 
-// Import data from the file
+// Import all data from the file to the database
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
@@ -39,7 +39,7 @@ const importData = async () => {
   }
 };
 
-// Delete data from the file
+// Delete all the data from the database
 const deleteData = async () => {
   try {
     await Bootcamp.deleteMany();

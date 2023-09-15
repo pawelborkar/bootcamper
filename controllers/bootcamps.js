@@ -50,7 +50,6 @@ const getAllBootcamps = asyncHandler(async (req, res) => {
   if (req.query.sort) {
     const sortBy = req.query.sort.split(',').join(' ');
     query = query.sort(sortBy);
-    // console.log('SORT', query);
   } else {
     query = query.sort('-createdAt');
   }
@@ -175,7 +174,7 @@ const deleteBootcamp = asyncHandler(async (req, res, next) => {
 /*
 @desc: Get bootcamps within a radius
 @Author: Pawel Borkar
-@route: DELETE /api/v1/bootcamp/radius/:zipcode/:distance/:unit
+@route: GET /api/v1/bootcamp/radius/:zipcode/:distance/:unit
 @access: Private
 */
 const getBootcampsWithinRadius = asyncHandler(async (req, res, next) => {
