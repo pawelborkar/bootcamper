@@ -12,25 +12,20 @@ import Bootcamp from '../models/Bootcamp.js';
 */
 
 const getCourses = asyncHandler(async (req, res) => {
-  // Building query
-  let query;
-
+  // Checking courses for a single bootcamp
   if (req.params.bootcampId) {
-    query = Course.find({ bootcamp: req.params.bootcampId });
-  } else {
-    query = Course.find().populate({
-      path: 'bootcamp',
-      select: 'name description',
+    const courses = await Course.find({ bootcamp: req.params.bootcampId });
+
+    // Returns available courses for asked single bootcamp
+    return res.status(200).json({
+      success: true,
+      count: courses.length,
+      data: courses,
     });
+  } else {
+    // Returning all the courses available at the platform
+    res.status(200).json(res.advancedResults);
   }
-
-  const courses = await query;
-
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    data: courses,
-  });
 });
 
 /*
