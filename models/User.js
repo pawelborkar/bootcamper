@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -9,11 +10,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add an email'],
     unique: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      'Please add a valid email.',
+    ],
   },
   role: {
     type: String,
-    enum: ['user', ' publisher'],
+    enum: ['user', 'publisher'],
     default: 'user',
   },
   password: {
@@ -29,5 +33,12 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Password encryption
+UserSchema.pre('save', async function () {
+  const salt = await bcrypt.genSalt(11);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
 
 export default mongoose.model('User', UserSchema);

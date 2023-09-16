@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import fileupload from 'express-fileupload';
+import auth from './routes/auth.js';
 import bootcamps from './routes/bootcamps.js';
 import courses from './routes/courses.js';
 import connectDB from './db/index.js';
@@ -37,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Mounte routers
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
+app.use('/api/v1/auth', auth);
 app.use(errorHandler);
 
 // home route
