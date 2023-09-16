@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import fileupload from 'express-fileupload';
 import bootcamps from './routes/bootcamps.js';
 import courses from './routes/courses.js';
-import connectDB from './config/db.js';
+import connectDB from './db/index.js';
 import errorHandler from './middleware/error.js';
 
 const app = express();
