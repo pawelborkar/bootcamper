@@ -27,6 +27,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.10.0",
     "node-geocoder": "^4.2.0",
     "slugify": "^1.6.6"

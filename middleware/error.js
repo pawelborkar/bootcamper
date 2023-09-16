@@ -8,13 +8,13 @@ const errorHandler = (err, req, res, next) => {
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {
-    const message = `Bootcamp not found with an id of ${err.value}`;
+    const message = `Resource not found with an id of ${err.value}`;
     error = new ErrorResponse(message, 404);
   }
 
   // Mongoose duplicate key
   if (err.code === 11000) {
-    const message = 'Bootcamp name already exists.';
+    const message = `${JSON.stringify(err.keyValue)} already exists.`;
     error = new ErrorResponse(message, 400);
   }
 
