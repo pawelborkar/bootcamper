@@ -23,7 +23,7 @@ const signup = asyncHandler(async (req, res, next) => {
 });
 
 /*
-@desc: Register a new user
+@desc: Logins an user
 @Author: Pawel Borkar
 @route: POST /api/v1/auth/signup
 @access: Public
@@ -78,7 +78,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 };
 
 /*
-@desc: Get current logged in user
+@desc: Get currently logged in user
 @Author: Pawel Borkar
 @route: POST /api/v1/auth/me
 @access: Private
