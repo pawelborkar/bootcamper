@@ -1,6 +1,7 @@
 import ErrorResponse from '../utils/errorResponse.js';
 import asyncHandler from '../middleware/async.js';
 import User from '../models/User.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 /*
 @desc: Register a new user
@@ -56,6 +57,73 @@ const signin = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+/*
+@desc: Get currently logged in user
+@Author: Pawel Borkar
+@route: POST /api/v1/auth/me
+@access: Private
+*/
+const getMe = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+/*
+@desc: Resets Password
+@Author: Pawel Borkar
+@route: POST /api/v1/auth/forgot-password
+@access: Public
+*/
+const forgotPassword = asyncHandler(async (req, res, next) => {
+  const usernameOrEmail = req.body.usernameOrEmail;
+
+  const user = await User.findOne({
+    $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+  });
+
+  if (!user) {
+    return next(new ErrorResponse(`User not found.`, 404));
+  }
+
+  // Get reset token
+  const resetToken = await user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  // Create reset URL
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/reset-password/${resetToken}`;
+
+  const message = `You are receiving this email because you has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Reset Password',
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: `Email Sent`,
+    });
+  } catch (error) {
+    console.error(error);
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorResponse(`Email could not be sent.`, 500));
+  }
+});
+
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
   // Create token
@@ -80,19 +148,4 @@ const sendTokenResponse = (user, statusCode, res) => {
   });
 };
 
-/*
-@desc: Get currently logged in user
-@Author: Pawel Borkar
-@route: POST /api/v1/auth/me
-@access: Private
-*/
-const getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
-
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
-});
-
-export { signup, signin, getMe };
+export { signup, signin, getMe, forgotPassword };
