@@ -46,7 +46,7 @@ const getSingleBootcamp = asyncHandler(async (req, res, next) => {
 const createBootcamp = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
-
+  req.body.username = req.user.username;
   // Check for published bootcamp
   const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
 
@@ -190,7 +190,7 @@ const bootcampUploadPhoto = asyncHandler(async (req, res, next) => {
   if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to upl;oad photo and update this bootcamp.`,
+        `User ${req.params.id} is not authorized to upload photo and update this bootcamp.`,
         401
       )
     );

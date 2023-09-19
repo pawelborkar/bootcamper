@@ -9,10 +9,11 @@ import User from '../models/User.js';
 @access: Public
 */
 const signup = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const { username, name, email, password, role } = req.body;
 
   // Create User
   const user = await User.create({
+    username,
     name,
     email,
     password,
@@ -29,15 +30,17 @@ const signup = asyncHandler(async (req, res, next) => {
 @access: Public
 */
 const signin = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { usernameOrEmail, password } = req.body;
 
   // Validate email and password
-  if (!email || !password) {
-    return next(new ErrorResponse(`Please provide and email`, 400));
+  if (!usernameOrEmail || !password) {
+    return next(new ErrorResponse(`Please provide a username or email`, 400));
   }
 
   // Check for a registered user
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({
+    $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+  }).select('+password');
 
   if (!user) {
     return next(new ErrorResponse(`Invalid credentials.`, 401));
