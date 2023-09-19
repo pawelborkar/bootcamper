@@ -13,6 +13,7 @@ import {
 import courseRouter from './courses.js';
 import advancedResults from '../middleware/advancedResults.js';
 import Bootcamp from '../models/Bootcamp.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -29,14 +30,14 @@ router
     }),
     getAllBootcamps
   )
-  .post(createBootcamp);
+  .post(protect, authorize, createBootcamp);
 
-router.route('/:id/photo').put(bootcampUploadPhoto);
+router.route('/:id/photo').put(protect, authorize, bootcampUploadPhoto);
 
 router
   .route('/:id')
   .get(getSingleBootcamp)
-  .delete(deleteBootcamp)
-  .put(updateBootcamp);
+  .delete(protect, authorize, deleteBootcamp)
+  .put(protect, authorize, updateBootcamp);
 
 export default router;

@@ -5,9 +5,11 @@ import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import fileupload from 'express-fileupload';
+import cookieParser from 'cookie-parser';
+import auth from './routes/auth.js';
 import bootcamps from './routes/bootcamps.js';
 import courses from './routes/courses.js';
-import connectDB from './config/db.js';
+import connectDB from './db/index.js';
 import errorHandler from './middleware/error.js';
 
 const app = express();
@@ -27,6 +29,7 @@ connectDB();
 
 // File uploading
 app.use(fileupload());
+app.use(cookieParser());
 
 // Set static folder
 const __filename = fileURLToPath(import.meta.url);
@@ -37,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Mounte routers
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
+app.use('/api/v1/auth', auth);
 app.use(errorHandler);
 
 // home route
