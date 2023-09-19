@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import fileupload from 'express-fileupload';
+import cookieParser from 'cookie-parser';
 import auth from './routes/auth.js';
 import bootcamps from './routes/bootcamps.js';
 import courses from './routes/courses.js';
@@ -28,6 +29,7 @@ connectDB();
 
 // File uploading
 app.use(fileupload());
+app.use(cookieParser());
 
 // Set static folder
 const __filename = fileURLToPath(import.meta.url);
