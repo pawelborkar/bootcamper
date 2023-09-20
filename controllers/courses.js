@@ -61,6 +61,7 @@ const getCourse = asyncHandler(async (req, res) => {
 */
 const createCourse = asyncHandler(async (req, res, next) => {
   req.body.bootcamp = req.params.bootcampId; // for adding bootcamp id into the Course model
+  req.body.user = req.user.id;
 
   // Check if the bootcamp with the required id is present in the database or not before adding a new course to it.
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
@@ -69,6 +70,16 @@ const createCourse = asyncHandler(async (req, res, next) => {
       new ErrorResponse(
         `Bootcamp not found with an id of ${req.params.id}`,
         404
+      )
+    );
+  }
+
+  // Make sure user is the bootcamp owner.
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to add a course to bootcamp ${bootcamp.name}.`,
+        401
       )
     );
   }
@@ -94,8 +105,16 @@ const updateCourse = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Course not found with an id of ${req.params.id}`, 404)
     );
   }
-
-  course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+  // Make sure user is the course owner.
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to update the course:  ${course.name}.`,
+        401
+      )
+    );
+  }
+  course = await Course.findByOneAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -118,10 +137,20 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Make sure user is the course owner.
+  if (course?.user?.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to delete the course: ${course.title}.`,
+        401
+      )
+    );
+  }
+
   await course.remove();
   res
     .status(200)
-    .json({ success: true, data: [], message: 'Course deleted successfully' });
+    .json({ success: true, message: 'Course deleted successfully' });
 });
 
 export { getCourses, getCourse, createCourse, updateCourse, deleteCourse };

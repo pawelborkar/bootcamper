@@ -4,3 +4,4 @@ config/config.env
 .env
 .vscode
 public/uploads/*
+_data/
