@@ -22,7 +22,7 @@ const signup = asyncHandler(async (req, res, next) => {
     role,
   });
 
-  sendTokenResponse(user, 200, res);
+  sendTokenResponse(user, 200, res, 'Thank you for signing up.');
 });
 
 /*
@@ -55,7 +55,7 @@ const signin = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`Invalid credentials.`, 401));
   }
 
-  sendTokenResponse(user, 200, res);
+  sendTokenResponse(user, 200, res, `Welcome ${user.name}`);
 });
 
 /*
@@ -153,12 +153,61 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   user.resetPasswordExpire = undefined;
   await user.save();
 
+  sendTokenResponse(user, 200, res, 'Successfully resetted the password.');
+});
 
-  sendTokenResponse(user,200,res)
+/*
+@desc: Update user details such as name and email
+@Author: Pawel Borkar
+@route: POST /api/v1/auth/me
+@access: Private
+*/
+const updateUserDetails = asyncHandler(async (req, res, next) => {
+  const fieldsToUpdate = {
+    name: req.body.name,
+    email: req.body.usernameOrEmail,
+  };
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Detail(s) updated!',
+    data: user,
+  });
+});
+
+/*
+@desc: Update password for the logged in user
+@Author: Pawel Borkar
+@route: POST /api/v1/auth/update-password
+@access: Private
+*/
+const updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+
+  // Check current password
+  if (!(await user.matchPassword(req.body.currentPassword))) {
+    return next(
+      ErrorResponse(
+        `Incorrect current password. Please enter a valid one.`,
+        401
+      )
+    );
+  }
+
+  // If the password matched then update it
+  user.password = req.body.newPassword;
+
+  await user.save();
+
+  sendTokenResponse(user, 200, res, 'Password updated successfully!');
 });
 
 // Helper for getting token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, res, message) => {
   // Create token
   const token = user.getSignedJWT();
 
@@ -177,8 +226,17 @@ const sendTokenResponse = (user, statusCode, res) => {
 
   res.status(statusCode).cookie('token', token, options).json({
     success: true,
+    message,
     token,
   });
 };
 
-export { signup, signin, getMe, forgotPassword, resetPassword };
+export {
+  signup,
+  signin,
+  forgotPassword,
+  resetPassword,
+  getMe,
+  updateUserDetails,
+  updatePassword,
+};

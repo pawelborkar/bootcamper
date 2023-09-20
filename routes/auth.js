@@ -5,6 +5,8 @@ import {
   getMe,
   forgotPassword,
   resetPassword,
+  updateUserDetails,
+  updatePassword,
 } from '../controllers/auth.js';
 import { protect } from '../middleware/auth.js';
 
@@ -15,6 +17,8 @@ router
   .post('/signin', signin)
   .post('/forgot-password', forgotPassword)
   .put('/reset-password/:resettoken', resetPassword)
-  .post('/me', protect, getMe);
+  .post('/me', protect, getMe)
+  .put('/update-details', protect, updateUserDetails)
+  .put('/update-password', protect, updatePassword);
 
 export default router;
