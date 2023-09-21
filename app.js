@@ -6,10 +6,7 @@ import express from 'express';
 import morgan from 'morgan';
 import fileupload from 'express-fileupload';
 import cookieParser from 'cookie-parser';
-import auth from './routes/auth.js';
-import bootcamps from './routes/bootcamps.js';
-import courses from './routes/courses.js';
-import users from './routes/users.js';
+import { auth, bootcamps, courses, users } from './routes/index.js';
 import connectDB from './db/index.js';
 import errorHandler from './middleware/error.js';
 

@@ -52,10 +52,7 @@ const isAdmin = asyncHandler(async (req, res, next) => {
   const userRole = req.user.role;
   if (!(userRole == 'admin')) {
     return next(
-      new ErrorResponse(
-        `Access Denied: Only publisher or admin can perform this operation`,
-        403
-      )
+      new ErrorResponse(`Access Denied: Only admin can access this route`, 401)
     );
   }
   next();
