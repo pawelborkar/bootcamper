@@ -18,7 +18,7 @@ const getAllBootcamps = asyncHandler(async (req, res) => {
 });
 
 /*
-@desc: Get all bootcamps information
+@desc: Get single bootcamp's information
 @Author: Pawel Borkar
 @route: GET /api/v1/bootcamps/:id
 @access: Public
@@ -105,7 +105,7 @@ const updateBootcamp = asyncHandler(async (req, res, next) => {
 });
 
 /*
-@desc: Delete a bootcamp from catalogue
+@desc: Delete a bootcamp
 @Author: Pawel Borkar
 @route: DELETE /api/v1/bootcamp/:id
 @access: Private
