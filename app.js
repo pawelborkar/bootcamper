@@ -68,7 +68,7 @@ app.listen(PORT, () => {
     chalk.greenBright(
       `Environment: ${chalk.cyanBright(
         process.env.NODE_ENV
-      )}, http://localhost${chalk.cyanBright(PORT)}`
+      )}, ${chalk.yellowBright(process.env.PORT)}`
     )
   );
 });

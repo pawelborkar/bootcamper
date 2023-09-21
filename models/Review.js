@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const ReviewsSchema = new Schema({
+const ReviewSchema = new Schema({
   title: {
     type: String,
     trim: true,
@@ -38,4 +38,4 @@ const ReviewsSchema = new Schema({
   },
 });
 
-export default model('Review', ReviewsSchema);
+export default model('Review', ReviewSchema);
