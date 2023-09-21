@@ -22,7 +22,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   queryString = JSON.parse(queryString);
   // Finding the resource in the database
   query = model.find(queryString);
-  
+
   // Select Fields
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ');
