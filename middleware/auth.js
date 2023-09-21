@@ -47,4 +47,18 @@ const authorize = asyncHandler(async (req, res, next) => {
   next();
 });
 
-export { protect, authorize };
+// Grant access to the specific roles
+const isAdmin = asyncHandler(async (req, res, next) => {
+  const userRole = req.user.role;
+  if (!(userRole == 'admin')) {
+    return next(
+      new ErrorResponse(
+        `Access Denied: Only publisher or admin can perform this operation`,
+        403
+      )
+    );
+  }
+  next();
+});
+
+export { protect, authorize, isAdmin };

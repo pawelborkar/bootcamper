@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import auth from './routes/auth.js';
 import bootcamps from './routes/bootcamps.js';
 import courses from './routes/courses.js';
+import users from './routes/users.js';
 import connectDB from './db/index.js';
 import errorHandler from './middleware/error.js';
 
@@ -41,6 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/users', users);
+
 app.use(errorHandler);
 
 // home route
