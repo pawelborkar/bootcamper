@@ -3,7 +3,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mongoose } from 'mongoose';
 import dotenv from 'dotenv';
-import chalk from 'chalk';
 import Bootcamp from './models/Bootcamp.js';
 import Course from './models/Course.js';
 import User from './models/User.js';
@@ -41,7 +40,7 @@ const importData = async () => {
     await Course.create(courses);
     await User.create(users);
     await Review.create(reviews);
-    console.log(chalk.bgGreenBright('Data imported successfully...'));
+    console.log('Data imported successfully...');
     process.exit();
   } catch (error) {
     console.log(error);
@@ -55,7 +54,7 @@ const deleteData = async () => {
     await Course.deleteMany();
     await User.deleteMany();
     await Review.deleteMany();
-    console.log(chalk.bgRedBright('Data deleted successfully...'));
+    console.log('Data deleted successfully...');
     process.exit();
   } catch (error) {
     console.log(error);

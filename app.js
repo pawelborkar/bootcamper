@@ -13,7 +13,6 @@ import ExpressMongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import cors from 'cors';
-import chalk from 'chalk';
 import { auth, bootcamps, courses, users, reviews } from './routes/index.js';
 import connectDB from './db/index.js';
 import errorHandler from './middleware/error.js';
@@ -96,19 +95,12 @@ app.use(
 
 // home route
 app.listen(PORT, () => {
-  console.log(
-    chalk.greenBright(
-      `Environment: ${chalk.cyanBright(
-        process.env.NODE_ENV
-      )}, ${chalk.yellowBright(process.env.PORT)}`
-    )
-  );
+  console.log(`Server up and running on PORT: ${PORT}`);
 });
 
 // Handles errors in our application
 process.on('unhandledRejection', (err, promise) => {
-  console.log(chalk.bold.underline.redBright(`Error: ${err.message}`));
-
+  console.error(err.message);
   //Close the server and exit the process
   process.exit(1);
 });
