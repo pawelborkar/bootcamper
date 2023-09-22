@@ -93,11 +93,11 @@ const updateReview = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Review not found with an id of ${req.params.id}`, 404)
     );
   }
-  // Make sure user is the review owner.
-  if (review.user.toString() !== req.user.id && req.user.role === 'publisher') {
+  // Make sure user is the review owner or admin.
+  if (review.user.toString() !== req.user.id && req.user.role === 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.user.username} is not authorized to update the review with and id of:  ${review._id}.`,
+        `User ${req.user.username} is not authorized to update the review with and id of: ${review._id}.`,
         401
       )
     );

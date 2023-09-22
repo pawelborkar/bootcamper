@@ -114,7 +114,7 @@ const updateCourse = asyncHandler(async (req, res, next) => {
       )
     );
   }
-  course = await Course.findByOneAndUpdate(req.params.id, req.body, {
+  course = await Course.findOneAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
