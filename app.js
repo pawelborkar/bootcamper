@@ -12,6 +12,7 @@ import fileupload from 'express-fileupload';
 import ExpressMongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
+import cors from 'cors';
 import chalk from 'chalk';
 import { auth, bootcamps, courses, users, reviews } from './routes/index.js';
 import connectDB from './db/index.js';
@@ -60,6 +61,9 @@ app.use(limiter);
 
 // Prevent http param pollution
 app.use(hpp());
+
+// Enable CORS
+app.use(cors());
 
 // Cookie Parser
 app.use(cookieParser());
