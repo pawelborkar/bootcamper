@@ -47,4 +47,29 @@ const authorize = asyncHandler(async (req, res, next) => {
   next();
 });
 
-export { protect, authorize };
+// Grant access to the specific roles
+const isAdmin = asyncHandler(async (req, res, next) => {
+  const userRole = req.user.role;
+  if (!(userRole == 'admin')) {
+    return next(
+      new ErrorResponse(`Access Denied: Only admin can access this route`, 401)
+    );
+  }
+  next();
+});
+
+// Grant access to the specific roles
+const isUser = asyncHandler(async (req, res, next) => {
+  const userRole = req.user.role;
+  if (!(userRole == 'user' || userRole == 'admin')) {
+    return next(
+      new ErrorResponse(
+        `Access Denied: Only user or admin can access this route`,
+        401
+      )
+    );
+  }
+  next();
+});
+
+export { protect, authorize, isAdmin, isUser };

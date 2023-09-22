@@ -37,6 +37,15 @@ const CourseSchema = new mongoose.Schema({
     ref: 'Bootcamp',
     required: true,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  username: {
+    type: String,
+    default: 'pawel',
+  },
 });
 
 // Static method for calculating average cost for tuition in a bootcamp

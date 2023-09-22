@@ -11,6 +11,7 @@ import {
 
 // Include other resource routers
 import courseRouter from './courses.js';
+import reviewRouter from './reviews.js';
 import advancedResults from '../middleware/advancedResults.js';
 import Bootcamp from '../models/Bootcamp.js';
 import { protect, authorize } from '../middleware/auth.js';
@@ -19,6 +20,7 @@ const router = express.Router();
 
 // Re-routing to the resource
 router.use('/:bootcampId/courses', courseRouter);
+router.use('/:bootcampId/reviews', reviewRouter);
 
 router.route('/radius').get(getBootcampsWithinRadius);
 router
