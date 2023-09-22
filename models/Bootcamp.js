@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 import geocoder from '../utils/geocoder.js';
-import chalk from 'chalk';
 const BootcampSchema = new mongoose.Schema(
   {
     name: {
@@ -146,11 +145,7 @@ BootcampSchema.pre('save', async function (next) {
     } else {
       // Handle the case where geocoder returned an empty result
       // or loc[0] is undefined
-      console.error(
-        chalk.redBright.underline(
-          'Geocoder did not return valid location data.'
-        )
-      );
+      console.error('Geocoder did not return valid location data.');
     }
 
     // Don't save address in the database
