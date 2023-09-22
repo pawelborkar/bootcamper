@@ -4,7 +4,7 @@ info:
   description: Bootcamper API for searching bootcamps.
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8000'
+  - url: 'https://api.bootcamper.pawel.in'
 components:
   securitySchemes:
     bearerAuth:
