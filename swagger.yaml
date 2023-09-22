@@ -3,6 +3,8 @@ info:
   title: Bootcamper
   description: Bootcamper API for searching bootcamps.
   version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
 components:
   securitySchemes:
     bearerAuth:
@@ -11,301 +13,19 @@ components:
 security:
   - bearerAuth: []
 tags:
-  - name: Bootcamps
-    description: 'Bootcamps Create, Read, Update, Delete, Filter and Sort functionalities.'
-  - name: Courses
-    description: All APIs related to courses.
   - name: Auth
     description: >-
       Routes for user authentication including signup, signin, forgot password,
       etc
+  - name: Bootcamps
+    description: 'Bootcamps Create, Read, Update, Delete, Filter and Sort functionalities.'
+  - name: Courses
+    description: All APIs related to courses.
+  - name: Reviews
+    description: User reviews for bootcamps and courses.
   - name: Admin
     description: CRUD functionalities for users only available to admins
 paths:
-  /api/v1/bootcamps:
-    get:
-      tags:
-        - Bootcamps
-      summary: Filter & Sort bootcamps
-      description: Filter out the bootcamps from the database.
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-        - name: select
-          in: query
-          schema:
-            type: string
-          example: name
-        - name: sort
-          in: query
-          schema:
-            type: string
-          example: '-name'
-        - name: page
-          in: query
-          schema:
-            type: integer
-          example: '2'
-        - name: limit
-          in: query
-          schema:
-            type: integer
-          example: '1'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-    post:
-      tags:
-        - Bootcamps
-      summary: Create New Bootcamp
-      description: |-
-        - **Create New Bootcamp**
-            
-
-        | **Access** |  |  |
-        | --- | --- | --- |
-        | Roles | Admin  <br> | User |
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                name: NewWorld Bootcamp
-                description: >-
-                  NewLife is a full stack JavaScript Bootcamp located in the
-                  heart of Boston that focuses on the technologies you need to
-                  get a high paying job as a web developer
-                website: 'https://newworld.com'
-                phone: (111) 111-1111
-                email: enroll@newworld.com
-                address: 233 Bay State Rd Boston MA 02215
-                careers:
-                  - Web Development
-                  - Mobile Development
-                  - UI/UX
-                  - BlockChain Development
-                housing: true
-                jobAssistance: true
-                jobGuarantee: false
-                acceptGi: true
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788:
-    get:
-      tags:
-        - Bootcamps
-      summary: Get Single Bootcamp
-      description: '- Get single bootcamp by ID.'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/650960d32acb213a4be9e73b:
-    put:
-      tags:
-        - Bootcamps
-      summary: Update Single Bootcamp
-      description: '- Update Single Bootcamp in Database.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                email: enroll@newera.com
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-    delete:
-      tags:
-        - Bootcamps
-      summary: Delete Single Bootcamp
-      description: '- Delete Single Bootcamp in Database.'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/radius/:
-    get:
-      tags:
-        - Bootcamps
-      summary: 'Get Bootcamps by Radius '
-      description: Get all bootcamps within a specific radius
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/courses:
-    get:
-      tags:
-        - Courses
-      summary: Get All Courses
-      description: Get all the courses available at the platform
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-        - name: select
-          in: query
-          schema:
-            type: string
-          example: title
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/courses:
-    get:
-      tags:
-        - Courses
-      summary: Get Courses for a Bootcamp
-      description: Get all the courses for a specific bootcamp
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/courses/5d725a4a7b292f5f8ceff789:
-    get:
-      tags:
-        - Courses
-      summary: Get  single course by id
-      description: Get a single course from the database by sending it's id in the params.
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/650962b52acb213a4be9e771/courses:
-    post:
-      tags:
-        - Courses
-      summary: Create New Course
-      description: Add a new course into the bootcamp
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                title: Front End Development 123
-                description: >-
-                  This course will provide you with all of the essentials to
-                  become a successful frontend web developer. You will learn to
-                  master HTML, CSS and front end JavaScript, along with tools
-                  like Git, VSCode and front end frameworks like Vue
-                weeks: 8
-                tuition: 11000
-                level: beginner
-                scholarshipsAvailable: true
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/courses/650961432acb213a4be9e74d:
-    put:
-      tags:
-        - Courses
-      summary: Update Single Course
-      description: Update a course with an id
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                tuition: 11100
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/courses/5d725cfec4ded7bcb480eaa5:
-    delete:
-      tags:
-        - Courses
-      summary: Delete Single Course
-      description: Delete a course from the bootcamp.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/650960d32acb213a4be9e73b/photo:
-    put:
-      tags:
-        - Courses
-      summary: Upload Image
-      description: Upload image for the bootcamp
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
   /api/v1/auth/signup:
     post:
       tags:
@@ -318,10 +38,10 @@ paths:
             schema:
               type: object
               example:
-                name: Pawel
+                name: Pawel Borkar
                 username: pawel
                 email: hi@pawel.in
-                password: pawel123!
+                password: Pawel@1234
                 role: publisher
       parameters:
         - name: Content-Type
@@ -347,8 +67,8 @@ paths:
             schema:
               type: object
               example:
-                usernameOrEmail: user
-                password: User@1234
+                usernameOrEmail: hi@pawel.in
+                password: Pawel@1234
       parameters:
         - name: Content-Type
           in: header
@@ -477,11 +197,421 @@ paths:
           description: Successful response
           content:
             application/json: {}
+  /api/v1/bootcamps:
+    get:
+      tags:
+        - Bootcamps
+      summary: Get All Bootcamps
+      description: |-
+        - Fetch all bootcamps information from database.
+        - Includes pagination, filtering, etc.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Bootcamps
+      summary: Create New Bootcamp
+      description: |-
+        - **Create New Bootcamp**
+            
+
+        | **Access** |  |  |
+        | --- | --- | --- |
+        | Roles | Admin  <br> | User |
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: ModernTech Bootcamp
+                description: >-
+                  ModernTech has one goal, and that is to make you a rockstar
+                  developer and/or designer with a six figure salary. We teach
+                  both development and UI/UX
+                website: 'https://moderntech.com'
+                phone: (222) 222-2222
+                email: enroll@moderntech.com
+                address: '220 Pawtucket St, Lowell, MA 01854'
+                careers:
+                  - Web Development
+                  - UI/UX
+                  - Mobile Development
+                housing: false
+                jobAssistance: true
+                jobGuarantee: false
+                acceptGi: true
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/650d465ed9db8749580e301b:
+    get:
+      tags:
+        - Bootcamps
+      summary: Get Single Bootcamp
+      description: '- Get single bootcamp by ID.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/650960d32acb213a4be9e73b:
+    put:
+      tags:
+        - Bootcamps
+      summary: Update Single Bootcamp
+      description: '- Update Single Bootcamp in Database.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: enroll@newera.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Bootcamps
+      summary: Delete Single Bootcamp
+      description: '- Delete Single Bootcamp in Database.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/radius/:
+    get:
+      tags:
+        - Bootcamps
+      summary: 'Get Bootcamps by Radius '
+      description: Get all bootcamps within a specific radius
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/:
+    get:
+      tags:
+        - Bootcamps
+      summary: Filter & Sort bootcamps
+      description: Filter out the bootcamps from the database.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+        - name: select
+          in: query
+          schema:
+            type: string
+          example: name
+        - name: sort
+          in: query
+          schema:
+            type: string
+          example: '-name'
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/courses:
+    get:
+      tags:
+        - Courses
+      summary: Get All Courses
+      description: Get all the courses available at the platform
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+        - name: select
+          in: query
+          schema:
+            type: string
+          example: title
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/courses:
+    get:
+      tags:
+        - Courses
+      summary: Get Courses for a Bootcamp
+      description: Get all the courses for a specific bootcamp
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/courses/5d725a4a7b292f5f8ceff789:
+    get:
+      tags:
+        - Courses
+      summary: Get  Single Course By Id
+      description: Get a single course from the database by sending it's id in the params.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/650d4a00ff7e39d156d75519/courses:
+    post:
+      tags:
+        - Courses
+      summary: Create New Course
+      description: Add a new course into the bootcamp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Web Design & Development
+                description: >-
+                  Get started building websites and web apps with
+                  HTML/CSS/JavaScript/PHP. We teach you
+                weeks: 10
+                tuition: 12000
+                level: beginner
+                scholarshipsAvailable: true
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/courses/650d4a50ff7e39d156d7552a:
+    put:
+      tags:
+        - Courses
+      summary: Update Single Course
+      description: Update a course with an id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                tuition: 11100
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/courses/5d725cfec4ded7bcb480eaa5:
+    delete:
+      tags:
+        - Courses
+      summary: Delete Single Course
+      description: Delete a course from the bootcamp.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/650960d32acb213a4be9e73b/photo:
+    put:
+      tags:
+        - Courses
+      summary: Upload Image
+      description: Upload image for the bootcamp
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/reviews:
+    get:
+      tags:
+        - Reviews
+      summary: Get All Reviews
+      description: >-
+        Get all reviews from database and populate with bootcamp name and
+        description.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/reviews:
+    get:
+      tags:
+        - Reviews
+      summary: Get Reviews For Bootcamp
+      description: Fetch the reviews for a specific bootcamp.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/reviews/5d7a514b5d2c12c7449be026:
+    get:
+      tags:
+        - Reviews
+      summary: Get Single Review
+      description: >-
+        Fetch a review from database with an id and populate bootcamp with name
+        and description.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/650d465ed9db8749580e301b/reviews:
+    post:
+      tags:
+        - Reviews
+      summary: Add Review
+      description: Add a review to the bootcamp.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Superb Job!
+                description: Got a very high paying job because of this.
+                rating: '10'
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/reviews/5d7a514b5d2c12c7449be027:
+    delete:
+      tags:
+        - Reviews
+      summary: Delete A Review
+      description: Deletes a review from the bootcamp.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/reviews/5d7a514b5d2c12c7449be020:
+    put:
+      tags:
+        - Reviews
+      summary: Update  Review For A Bootcamp
+      description: Update a review for a bootcamp.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Nice Experience!
+                description: Experienced faculty and super smart peers.
+                rating: 8
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          description: JSON Type
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
   /api/v1/users:
     get:
       tags:
         - Admin
-      summary: Get all users
+      summary: Get All Users
       responses:
         '200':
           description: Successful response
@@ -490,7 +620,7 @@ paths:
     post:
       tags:
         - Admin
-      summary: Create new User
+      summary: Create New User
       requestBody:
         content:
           application/json:
@@ -507,22 +637,12 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /api/v1/users/5d7a514b5d2c12c7449be042:
+  /api/v1/users/6509e01fdd96a4081a7442f0:
     get:
       tags:
         - Admin
       summary: Get Single User
       description: Get single user details from database by sending id in the params
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-    delete:
-      tags:
-        - Admin
-      summary: Delete User
-      description: Deletes a user
       responses:
         '200':
           description: Successful response
@@ -541,6 +661,16 @@ paths:
               type: object
               example:
                 role: publisher
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Admin
+      summary: Delete User
+      description: Deletes a user
       responses:
         '200':
           description: Successful response
