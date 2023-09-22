@@ -59,6 +59,24 @@ const signin = asyncHandler(async (req, res, next) => {
 });
 
 /*
+@desc: Log outs currently logged in user
+@Author: Pawel Borkar
+@route: GET /api/v1/auth/logout
+@access: Public
+*/
+const logout = asyncHandler(async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Logout Successfully.',
+  });
+});
+
+/*
 @desc: Get currently logged in user
 @Author: Pawel Borkar
 @route: POST /api/v1/auth/me
@@ -234,6 +252,7 @@ const sendTokenResponse = (user, statusCode, res, message) => {
 export {
   signup,
   signin,
+  logout,
   forgotPassword,
   resetPassword,
   getMe,
