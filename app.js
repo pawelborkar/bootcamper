@@ -10,6 +10,8 @@ import morgan from 'morgan';
 import YAML from 'yaml';
 import fileupload from 'express-fileupload';
 import ExpressMongoSanitize from 'express-mongo-sanitize';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
 import chalk from 'chalk';
 import { auth, bootcamps, courses, users, reviews } from './routes/index.js';
 import connectDB from './db/index.js';
@@ -48,6 +50,17 @@ app.use(ExpressMongoSanitize());
 // Set security headers
 app.use(helmet());
 
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 100,
+});
+
+app.use(limiter);
+
+// Prevent http param pollution
+app.use(hpp());
+
 // Cookie Parser
 app.use(cookieParser());
 
@@ -61,6 +74,7 @@ app.use(`/api/${API_VERSION}/auth`, auth);
 app.use(`/api/${API_VERSION}/users`, users);
 app.use(`/api/${API_VERSION}/reviews`, reviews);
 
+// Error handler middleware
 app.use(errorHandler);
 
 // Swagger integration
