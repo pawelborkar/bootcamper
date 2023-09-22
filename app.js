@@ -8,6 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import morgan from 'morgan';
 import YAML from 'yaml';
 import fileupload from 'express-fileupload';
+import ExpressMongoSanitize from 'express-mongo-sanitize';
 import chalk from 'chalk';
 import { auth, bootcamps, courses, users, reviews } from './routes/index.js';
 import connectDB from './db/index.js';
@@ -35,6 +36,7 @@ if (process.env.NODE_ENV === 'development') {
 connectDB();
 
 // File uploading
+app.use(ExpressMongoSanitize());
 app.use(fileupload());
 app.use(cookieParser());
 

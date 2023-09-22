@@ -20,6 +20,9 @@ dependencies:
   express-fileupload:
     specifier: ^1.4.0
     version: 1.4.0
+  express-mongo-sanitize:
+    specifier: ^2.2.0
+    version: 2.2.0
   jsonwebtoken:
     specifier: ^9.0.2
     version: 9.0.2
@@ -1278,6 +1281,11 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       busboy: 1.6.0
+    dev: false
+
+  /express-mongo-sanitize@2.2.0:
+    resolution: {integrity: sha512-PZBs5nwhD6ek9ZuP+W2xmpvcrHwXZxD5GdieX2dsjPbAbH4azOkrHbycBud2QRU+YQF1CT+pki/lZGedHgo/dQ==}
+    engines: {node: '>=10'}
     dev: false
 
   /express@4.18.2:
