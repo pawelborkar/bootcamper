@@ -58,8 +58,7 @@ app.use(
       docExpansion: 'none', // keep all the sections collapsed by default
     },
     swaggerUrl: `${process.env.API_URL}`,
-    // customCss: `.swagger-ui{background:#3A4454; color:#fff}`,
-    customSiteTitle: 'Bootcamper docs',
+    customSiteTitle: 'Bootcamper API Docs',
   })
 );
 

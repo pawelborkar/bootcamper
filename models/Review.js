@@ -51,4 +51,37 @@ ReviewSchema.pre('save', async function (next) {
   }
 });
 
+// Static method for calculating average cost for tuition in a bootcamp
+ReviewSchema.statics.getAverageRating = async function (bootcampId) {
+  const obj = await this.aggregate([
+    {
+      $match: { bootcamp: bootcampId },
+    },
+    {
+      $group: {
+        _id: '$bootcamp',
+        averageRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+
+  try {
+    await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
+      averageRating: obj[0].averageRating,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// calculate the averageRating after saving
+ReviewSchema.post('save', function () {
+  this.constructor.getAverageRating(this.bootcamp);
+});
+
+// calculate the averageRating before removing
+ReviewSchema.pre('remove', function () {
+  this.constructor.getAverageRating(this.bootcamp);
+});
+
 export default mongoose.model('Review', ReviewSchema);
