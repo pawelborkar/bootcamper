@@ -1,7 +1,7 @@
 [
   {
     "_id": "5d713995b721c3bb38c1f5d0",
-    "username": "admin",
+    "username": "publisher",
     "user": "5d7a514b5d2c12c7449be045",
     "name": "Devworks Bootcamp",
     "description": "Devworks is a full stack JavaScript Bootcamp located in the heart of Boston that focuses on the technologies you need to get a high paying job as a web developer",
@@ -49,7 +49,7 @@
   },
   {
     "_id": "5d725a1b7b292f5f8ceff788",
-    "username": "admin",
+    "username": "publisher",
     "user": "5c8a1d5b0190b214360dc032",
     "name": "Devcentral Bootcamp",
     "description": "Is coding your passion? Codemasters will give you the skills and the tools to become the best developer possible. We specialize in front end and full stack web development",

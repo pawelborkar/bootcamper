@@ -44,8 +44,7 @@ const CourseSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    ref: 'User',
-    required: true,
+    default: 'pawel',
   },
 });
 

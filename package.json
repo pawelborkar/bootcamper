@@ -1,7 +1,7 @@
 {
-  "name": "devcamper",
+  "name": "bootcamper-api",
   "version": "0.0.1",
-  "description": "DEV Camper Backend",
+  "description": "Bootcamper Backend",
   "main": "app.js",
   "type": "module",
   "repository": "https://github.com/pawelborkar/devcamper",

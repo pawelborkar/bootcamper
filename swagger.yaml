@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Bootcamper
-  description: Dev Camper API for searching bootcamps.
+  description: Bootcamper API for searching bootcamps.
   version: 1.0.0
 components:
   securitySchemes:
@@ -82,7 +82,7 @@ paths:
                   NewLife is a full stack JavaScript Bootcamp located in the
                   heart of Boston that focuses on the technologies you need to
                   get a high paying job as a web developer
-                website: 'https://NewWorld.com'
+                website: 'https://newworld.com'
                 phone: (111) 111-1111
                 email: enroll@newworld.com
                 address: 233 Bay State Rd Boston MA 02215

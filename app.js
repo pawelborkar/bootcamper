@@ -9,7 +9,7 @@ import morgan from 'morgan';
 import YAML from 'yaml';
 import fileupload from 'express-fileupload';
 import chalk from 'chalk';
-import { auth, bootcamps, courses, users } from './routes/index.js';
+import { auth, bootcamps, courses, users, reviews } from './routes/index.js';
 import connectDB from './db/index.js';
 import errorHandler from './middleware/error.js';
 // Set static folder
@@ -45,6 +45,7 @@ app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
+app.use('/api/v1/reviews', reviews);
 
 app.use(errorHandler);
 
