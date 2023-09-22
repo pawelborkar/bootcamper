@@ -41,15 +41,8 @@ paths:
                 name: Pawel Borkar
                 username: pawel
                 email: hi@pawel.in
-                password: Pawel@1234
+                password: Pawel@123!
                 role: publisher
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
@@ -69,13 +62,6 @@ paths:
               example:
                 usernameOrEmail: hi@pawel.in
                 password: Pawel@1234
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
@@ -109,38 +95,32 @@ paths:
               type: object
               example:
                 usernameOrEmail: user
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/auth/reset-password/31cab4ef9ca4fe05aa800eaf334e9a9402ee06ce:
+  /api/v1/auth/reset-password/{resetToken}:
     put:
       tags:
         - Auth
       summary: Reset Password
       description: Reset user password using token.
+      parameters: 
+        - name: resetToken
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: reset token received via email
+          example: '31cab4ef9ca4fe05aa800eaf334e9a9402ee06ce' # Example bootcamp ID 
       requestBody:
         content:
           application/json:
             schema:
               type: object
               example:
-                password: XYX@1234
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
+                password: Seneca@1234
       responses:
         '200':
           description: Successful response
@@ -159,13 +139,6 @@ paths:
               type: object
               example:
                 name: User
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
@@ -185,13 +158,6 @@ paths:
               example:
                 currentPassword: User@1234
                 newPassword: Abc@1234
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
@@ -205,13 +171,6 @@ paths:
       description: |-
         - Fetch all bootcamps information from database.
         - Includes pagination, filtering, etc.
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
@@ -251,35 +210,45 @@ paths:
                 jobAssistance: true
                 jobGuarantee: false
                 acceptGi: true
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/bootcamps/650d465ed9db8749580e301b:
+  /api/v1/bootcamps/{bootcampId}:
     get:
       tags:
         - Bootcamps
       summary: Get Single Bootcamp
       description: '- Get single bootcamp by ID.'
+      operationId: getSingleBootcamp
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788' # Example bootcamp ID 
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/bootcamps/650960d32acb213a4be9e73b:
     put:
       tags:
         - Bootcamps
       summary: Update Single Bootcamp
       description: '- Update Single Bootcamp in Database.'
+      operationId: updateBootcamp
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
       requestBody:
         content:
           application/json:
@@ -297,6 +266,15 @@ paths:
         - Bootcamps
       summary: Delete Single Bootcamp
       description: '- Delete Single Bootcamp in Database.'
+      operationId: deleteBootcamp
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
       responses:
         '200':
           description: Successful response
@@ -308,13 +286,6 @@ paths:
         - Bootcamps
       summary: 'Get Bootcamps by Radius '
       description: Get all bootcamps within a specific radius
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
@@ -327,12 +298,6 @@ paths:
       summary: Filter & Sort bootcamps
       description: Filter out the bootcamps from the database.
       parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
         - name: select
           in: query
           schema:
@@ -358,6 +323,35 @@ paths:
           description: Successful response
           content:
             application/json: {}
+  /api/v1/bootcamps/{bootcampId}/photo:
+  put:
+    tags:
+      - Courses
+    summary: Upload Image
+    description: Upload image for the bootcamp
+    operationId: bootcampUploadPhoto
+    parameters:
+      - name: courseId
+        in: path # Specify "path" as the location
+        required: true # Mark it as required
+        schema:
+          type: string
+        description: The ID of the course
+        example: '5d725cfec4ded7bcb480eaa5'
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json: {}
   /api/v1/courses:
     get:
       tags:
@@ -365,12 +359,6 @@ paths:
       summary: Get All Courses
       description: Get all the courses available at the platform
       parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
         - name: select
           in: query
           schema:
@@ -381,48 +369,40 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/courses:
+  /api/v1/bootcamps/{bootcampId}/courses:
     get:
       tags:
         - Courses
       summary: Get Courses for a Bootcamp
       description: Get all the courses for a specific bootcamp
+      operationId: getCourses
       parameters:
-        - name: Content-Type
-          in: header
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
           schema:
             type: string
-          description: JSON Type
-          example: application/json
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/courses/5d725a4a7b292f5f8ceff789:
-    get:
-      tags:
-        - Courses
-      summary: Get  Single Course By Id
-      description: Get a single course from the database by sending it's id in the params.
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/650d4a00ff7e39d156d75519/courses:
     post:
       tags:
         - Courses
       summary: Create New Course
       description: Add a new course into the bootcamp
+      operationId: createCourse
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
       requestBody:
         content:
           application/json:
@@ -437,24 +417,45 @@ paths:
                 tuition: 12000
                 level: beginner
                 scholarshipsAvailable: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}        
+  /api/v1/courses/{courseId}:
+    get:
+      tags:
+        - Courses
+      summary: Get  Single Course By Id
+      description: Get a single course from the database by sending it's id in the params.
+      operationId: getCourse
       parameters:
-        - name: Content-Type
-          in: header
+        - name: courseId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
           schema:
             type: string
-          description: JSON Type
-          example: application/json
+          description: The ID of the course
+          example: '5d725cfec4ded7bcb480eaa5'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/courses/650d4a50ff7e39d156d7552a:
     put:
       tags:
         - Courses
       summary: Update Single Course
       description: Update a course with an id
+      operationId: updateCourse
+      parameters:
+        - name: courseId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the course
+          example: '5d725cfec4ded7bcb480eaa5'
       requestBody:
         content:
           application/json:
@@ -467,32 +468,29 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/courses/5d725cfec4ded7bcb480eaa5:
+  /api/v1/bootcamps/{bootcampId}/courses/{courseId}:
     delete:
       tags:
         - Courses
       summary: Delete Single Course
       description: Delete a course from the bootcamp.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/650960d32acb213a4be9e73b/photo:
-    put:
-      tags:
-        - Courses
-      summary: Upload Image
-      description: Upload image for the bootcamp
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+      operationId: deleteCourse
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
+
+        - name: courseId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the course
+          example: '5d725cfec4ded7bcb480eaa5'
       responses:
         '200':
           description: Successful response
@@ -506,48 +504,45 @@ paths:
       description: >-
         Get all reviews from database and populate with bootcamp name and
         description.
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/reviews:
+  /api/v1/bootcamps/{bootcampId}/reviews:
     get:
       tags:
         - Reviews
       summary: Get Reviews For Bootcamp
       description: Fetch the reviews for a specific bootcamp.
+      operationId: getAllReviews
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/reviews/5d7a514b5d2c12c7449be026:
-    get:
-      tags:
-        - Reviews
-      summary: Get Single Review
-      description: >-
-        Fetch a review from database with an id and populate bootcamp with name
-        and description.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /api/v1/bootcamps/650d465ed9db8749580e301b/reviews:
     post:
       tags:
         - Reviews
       summary: Add Review
       description: Add a review to the bootcamp.
+      operationId: addReview
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
       requestBody:
         content:
           application/json:
@@ -557,35 +552,47 @@ paths:
                 title: Superb Job!
                 description: Got a very high paying job because of this.
                 rating: '10'
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/bootcamps/5d725a1b7b292f5f8ceff788/reviews/5d7a514b5d2c12c7449be027:
-    delete:
+  /api/v1/reviews/{reviewId}:
+    get:
       tags:
         - Reviews
-      summary: Delete A Review
-      description: Deletes a review from the bootcamp.
+      summary: Get Single Review
+      description: >-
+        Fetch a review from database with an id and populate bootcamp with name
+        and description.
+        operationId: getAllReviews
+      parameters:
+        - name: reviewId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the review
+          example: '5d725a1b7b292f5f8ceff788'
       responses:
         '200':
           description: Successful response
           content:
-            application/json: {}
-  /api/v1/reviews/5d7a514b5d2c12c7449be020:
+            application/json: {} 
     put:
       tags:
         - Reviews
       summary: Update  Review For A Bootcamp
       description: Update a review for a bootcamp.
+      operationId: updateReview
+      parameters:
+        - name: reviewId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the review
+          example: '5d7a514b5d2c12c7449be020'
       requestBody:
         content:
           application/json:
@@ -595,18 +602,38 @@ paths:
                 title: Nice Experience!
                 description: Experienced faculty and super smart peers.
                 rating: 8
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          description: JSON Type
-          example: application/json
       responses:
         '200':
           description: Successful response
           content:
-            application/json: {}
+            application/json: {} 
+  /api/v1/bootcamps/{bootcampId}/reviews/{reviewId}:
+    delete:
+      tags:
+        - Reviews
+      summary: Delete A Review
+      description: Deletes a review from the bootcamp.
+      operationId: deleteReview
+      parameters:
+        - name: bootcampId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the bootcamp
+          example: '5d725a1b7b292f5f8ceff788'
+        - name: reviewId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the review
+          example: '5d7a514b5d2c12c7449be020'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {} 
   /api/v1/users:
     get:
       tags:
@@ -637,23 +664,40 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /api/v1/users/6509e01fdd96a4081a7442f0:
+  /api/v1/users/{userId}:
     get:
       tags:
         - Admin
       summary: Get Single User
       description: Get single user details from database by sending id in the params
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the review
+          example: '5d7a514b5d2c12c7449be020'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /api/v1/users/650bfc0b78e9bd5f0716beda:
     put:
       tags:
         - Admin
       summary: Update User
       description: Updates the user details and role
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the review
+          example: '5d7a514b5d2c12c7449be020'
       requestBody:
         content:
           application/json:
@@ -671,6 +715,15 @@ paths:
         - Admin
       summary: Delete User
       description: Deletes a user
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path # Specify "path" as the location
+          required: true # Mark it as required
+          schema:
+            type: string
+          description: The ID of the review
+          example: '5d7a514b5d2c12c7449be020'
       responses:
         '200':
           description: Successful response
