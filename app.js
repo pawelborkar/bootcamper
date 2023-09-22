@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import YAML from 'yaml';
 import fileupload from 'express-fileupload';
 import ExpressMongoSanitize from 'express-mongo-sanitize';
@@ -33,10 +33,10 @@ const PORT = process.env.PORT || 8000;
 
 const API_VERSION = process.env.API_VERSION.toLowerCase();
 
-// logger for dev environment
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+// // logger for dev environment
+// if (process.env.NODE_ENV === 'development') {
+//   app.use(morgan('dev'));
+// }
 
 // Connect to cloud database
 connectDB();
